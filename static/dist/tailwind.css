@@ -1,0 +1,25 @@
+/* Tailwind CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+.heatmap-container {
+    @apply p-4 rounded-lg shadow-lg;
+}
+
+.heatmap-cell {
+    @apply p-2 text-center transition-colors duration-200;
+}
+
+.legend {
+    @apply mt-4 flex items-center justify-center space-x-2;
+}
+
+.header {
+    @apply bg-white shadow-sm py-4;
+}
+
+.footer {
+    @apply bg-gray-100 py-4 mt-8;
+} 
