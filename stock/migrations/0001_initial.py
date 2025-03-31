@@ -30,16 +30,12 @@ class Migration(migrations.Migration):
                         help_text="Stock symbol (e.g., RELIANCE, TCS)",
                         max_length=20,
                         unique=True,
-                        validators=[
-                            django.core.validators.MinLengthValidator(1)
-                        ],
+                        validators=[django.core.validators.MinLengthValidator(1)],
                     ),
                 ),
                 (
                     "name",
-                    models.CharField(
-                        help_text="Full company name", max_length=100
-                    ),
+                    models.CharField(help_text="Full company name", max_length=100),
                 ),
                 (
                     "sector",
@@ -79,9 +75,7 @@ class Migration(migrations.Migration):
                 (
                     "open_price",
                     models.DecimalField(
-                        decimal_places=2,
-                        help_text="Opening price",
-                        max_digits=10,
+                        decimal_places=2, help_text="Opening price", max_digits=10
                     ),
                 ),
                 (
@@ -103,9 +97,7 @@ class Migration(migrations.Migration):
                 (
                     "close_price",
                     models.DecimalField(
-                        decimal_places=2,
-                        help_text="Closing price",
-                        max_digits=10,
+                        decimal_places=2, help_text="Closing price", max_digits=10
                     ),
                 ),
                 ("volume", models.BigIntegerField(help_text="Trading volume")),

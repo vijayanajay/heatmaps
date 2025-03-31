@@ -11,7 +11,6 @@ def main():
     print(f"Using settings module: {os.environ['DJANGO_SETTINGS_MODULE']}")
     try:
         from django.core.management import execute_from_command_line
-
         print("Django management commands loaded successfully")
     except ImportError as exc:
         raise ImportError(

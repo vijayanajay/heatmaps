@@ -6,7 +6,7 @@ document.addEventListener('alpine:init', () => {
         async changeTimeframe(newTimeframe) {
             this.loading = true;
             this.timeframe = newTimeframe;
-
+            
             try {
                 const response = await fetch(`/heatmap/${newTimeframe}/`);
                 const data = await response.json();
@@ -18,4 +18,4 @@ document.addEventListener('alpine:init', () => {
             }
         }
     }));
-});
+}); 

@@ -14,16 +14,12 @@ from django.core.wsgi import get_wsgi_application
 
 # Initialize environment variables
 env = environ.Env()
-env_file = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env"
-)
+env_file = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.env')
 if os.path.isfile(env_file):
     environ.Env.read_env(env_file)
 
 # Set the default Django settings module
-django_settings = env(
-    "DJANGO_SETTINGS_MODULE", default="heatmaps.settings.prod"
-)
+django_settings = env('DJANGO_SETTINGS_MODULE', default='heatmaps.settings.prod')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", django_settings)
 
 # Get the WSGI application

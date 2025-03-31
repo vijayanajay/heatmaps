@@ -100,4 +100,4 @@ Add a crontab entry:
 1. **pg_dump not found**: Ensure PostgreSQL client tools are installed and in your PATH
 2. **Permission denied**: Ensure your database user has sufficient privileges
 3. **Connection refused**: Check database host and port settings in .env file
-4. **Database does not exist**: Verify database name in .env file
+4. **Database does not exist**: Verify database name in .env file 

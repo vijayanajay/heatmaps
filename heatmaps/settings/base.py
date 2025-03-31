@@ -19,10 +19,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Initialize environment variables
 env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Secret key
-SECRET_KEY = env("SECRET_KEY")
+SECRET_KEY = env('SECRET_KEY')
 
 # Debug settings (override in dev.py and prod.py)
 DEBUG = False
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    
     # Custom apps
     "stock",
 ]
@@ -58,7 +59,7 @@ ROOT_URLCONF = "heatmaps.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "templates")],
+        "DIRS": [os.path.join(BASE_DIR, 'templates')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -78,13 +79,13 @@ WSGI_APPLICATION = "heatmaps.wsgi.application"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": env("DB_NAME_DEV"),
-        "USER": env("DB_USER_DEV"),
-        "PASSWORD": env("DB_PASSWORD_DEV"),
-        "HOST": env("DB_HOST_DEV"),
-        "PORT": env("DB_PORT_DEV"),
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env('DB_NAME_DEV'),
+        'USER': env('DB_USER_DEV'),
+        'PASSWORD': env('DB_PASSWORD_DEV'),
+        'HOST': env('DB_HOST_DEV'),
+        'PORT': env('DB_PORT_DEV'),
     }
 }
 
@@ -123,17 +124,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(
-    BASE_DIR, "staticfiles"
-)  # Directory for collected static files
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static")
-]  # Additional directories for static files
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Directory for collected static files
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Additional directories for static files
 
 # Media files (user uploads)
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")  # Directory for media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')  # Directory for media files
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
