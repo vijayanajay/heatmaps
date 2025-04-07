@@ -1,0 +1,451 @@
+phase_1_and_2_implementation: # Renamed to reflect combined phases
+  name: "MVP Development (Local First) & Initial Deployment"
+  duration: "Month 1-2" # Combined duration
+  work_breakdown:
+    # --- Phase 1: Local Core Setup & Basic Heatmap (Month 1) ---
+    - id: "P1_LOCAL_ENV"
+      name: "Local Development Environment Setup"
+      tasks:
+        - id: "P1_LOCAL_ENV_01"
+          description: "Setup Core Tools & Project"
+          owner: "DevOps/Backend"
+          dependencies: []
+          duration: "1d"
+          status: completed
+          deliverables:
+            - "Python virtual environment"
+            - "Git repository initialized"
+            - "Core dependencies installed (Django, psycopg2/sqlite, python-dotenv)"
+            - "requirements.txt generated"
+          subtasks:
+            - "Create project directory"
+            - "Initialize Git repository & .gitignore"
+            - "Install core Python packages"
+            - "Freeze requirements"
+
+        - id: "P1_LOCAL_ENV_02"
+          description: "Initialize Django Project Structure"
+          owner: "Backend"
+          dependencies: ["P1_LOCAL_ENV_01"]
+          duration: "1d"
+          status: completed
+          deliverables:
+            - "Django project created (e.g., 'heatmaps')"
+            - "Core Django app created (e.g., 'apps/core')"
+            - "Settings split (base.py, dev.py)"
+            - ".env.example file"
+          subtasks:
+            - "Run django-admin startproject"
+            - "Run python manage.py startapp core within 'apps' directory"
+            - "Refactor settings into base/dev structure"
+            - "Create apps/__init__.py"
+            - "Register 'apps.core.apps.CoreConfig' in settings"
+            - "Create .env.example with initial variables (SECRET_KEY, DEBUG, DATABASE_URL)"
+
+        - id: "P1_LOCAL_ENV_03"
+          description: "Configure Local Database"
+          owner: "Backend/DevOps"
+          dependencies: ["P1_LOCAL_ENV_02"]
+          duration: "1d"
+          status: completed
+          deliverables:
+            - "Local PostgreSQL database created (or SQLite configured)"
+            - "dj-database-url configured in settings.py"
+            - ".env file with local DATABASE_URL"
+            - "Successful initial migration"
+          subtasks:
+            - "Install PostgreSQL locally (if not using SQLite)"
+            - "Create local database and user"
+            - "Install dj-database-url package"
+            - "Configure DATABASES setting in base.py using dj_database_url"
+            - "Update local .env file"
+            - "Run python manage.py migrate"
+
+        - id: "P1_LOCAL_ENV_04"
+          description: "Setup Development Tools"
+          owner: "DevOps"
+          dependencies: ["P1_LOCAL_ENV_01"]
+          duration: "1d"
+          status: completed
+          deliverables:
+            - "Code formatting (Black)"
+            - "Linting (Flake8)"
+            - "Pre-commit hooks configuration"
+          subtasks:
+            - "Install Black, Flake8"
+            - "Configure formatting/linting settings (e.g., pyproject.toml)"
+            - "Install pre-commit"
+            - "Create .pre-commit-config.yaml"
+            - "Install pre-commit hooks"
+
+    - id: "P1_LOCAL_BACKEND"
+      name: "Local Backend Core Logic"
+      tasks:
+        - id: "P1_LOCAL_BACKEND_01"
+          description: "Create Basic Stock Data Models"
+          owner: "Backend"
+          dependencies: ["P1_LOCAL_ENV_03"]
+          duration: "2d"
+          status: completed
+          deliverables:
+            - "Stock/Index models defined in apps/core/models.py"
+            - "Database migrations generated and applied"
+          subtasks:
+            - "Define initial models (e.g., Stock, Index)"
+            - "Run python manage.py makemigrations core"
+            - "Run python manage.py migrate"
+
+        - id: "P1_LOCAL_BACKEND_02"
+          description: "Implement Initial YFinance Fetching Script"
+          owner: "Backend"
+          dependencies: ["P1_LOCAL_BACKEND_01"]
+          duration: "2d"
+          status: completed
+          deliverables:
+            - "YFinance package installed"
+            - "Management command or script to fetch data for Nifty 500"
+            - "Script populates local database models"
+            - "Basic error handling for fetching"
+          subtasks:
+            - "Install yfinance package"
+            - "Create management command (e.g., fetch_stock_data)"
+            - "Implement logic to fetch data using yfinance API"
+            - "Implement logic to parse and save data to Django models"
+            - "Add basic try/except blocks"
+
+        - id: "P1_LOCAL_BACKEND_03"
+          description: "Build Basic DRF API Endpoint"
+          owner: "Backend"
+          dependencies: ["P1_LOCAL_BACKEND_01"]
+          duration: "2d"
+          status: completed
+          deliverables:
+            - "Django REST Framework installed"
+            - "Serializer for Stock/Index data"
+            - "Basic ViewSet/APIView to serve initial heatmap data"
+            - "URL routing for the API endpoint"
+          subtasks:
+            - "Install djangorestframework"
+            - "Add 'rest_framework' to INSTALLED_APPS"
+            - "Create serializers in apps/core/serializers.py"
+            - "Create views in apps/core/views.py"
+            - "Configure URLs in apps/core/urls.py and project urls.py"
+
+        - id: "P1_LOCAL_BACKEND_04"
+          description: "Write Initial Backend Tests"
+          owner: "Backend/QA"
+          dependencies: ["P1_LOCAL_BACKEND_01", "P1_LOCAL_BACKEND_03"]
+          duration: "1d"
+          status: completed
+          deliverables:
+            - "Pytest and pytest-django installed"
+            - "Basic tests for models (creation, fields)"
+            - "Basic tests for DRF endpoint (status code, basic data structure)"
+          subtasks:
+            - "Install pytest, pytest-django"
+            - "Configure pytest (pytest.ini)"
+            - "Write model tests in apps/core/tests.py"
+            - "Write basic API tests using APIClient"
+
+    - id: "P1_LOCAL_FRONTEND"
+      name: "Local Frontend Core Setup"
+      tasks:
+        - id: "P1_LOCAL_FRONTEND_01"
+          description: "Setup Frontend Tooling (Tailwind)"
+          owner: "Frontend"
+          dependencies: ["P1_LOCAL_ENV_02"]
+          duration: "1d"
+          deliverables:
+            - "Node.js/npm installed"
+            - "Tailwind CSS installed via npm"
+            - "Tailwind configuration file (tailwind.config.js)"
+            - "package.json with build scripts"
+            - "Integration with Django static files"
+          subtasks:
+            - "Ensure Node.js/npm available"
+            - "Run npm init"
+            - "Install tailwindcss, postcss, autoprefixer"
+            - "Run npx tailwindcss init"
+            - "Configure template paths in tailwind.config.js"
+            - "Configure input/output CSS paths"
+            - "Add build script to package.json (e.g., tailwind build)"
+            - "Configure Django STATICFILES_DIRS"
+
+        - id: "P1_LOCAL_FRONTEND_02"
+          description: "Create Base Template and Static Structure"
+          owner: "Frontend"
+          dependencies: ["P1_LOCAL_FRONTEND_01"]
+          duration: "1d"
+          deliverables:
+            - "Base HTML template (templates/base.html) with Tailwind CSS link"
+            - "Static directory structure (static/css, static/js, static/images)"
+            - "Initial compiled CSS file"
+          subtasks:
+            - "Create templates directory"
+            - "Create base.html with standard HTML structure"
+            - "Link to the compiled Tailwind CSS file in base.html"
+            - "Create static directories"
+            - "Run initial Tailwind build to generate CSS"
+
+        - id: "P1_LOCAL_FRONTEND_03"
+          description: "Implement Basic Plotly.js Visualization"
+          owner: "Frontend"
+          dependencies: ["P1_LOCAL_FRONTEND_02", "P1_LOCAL_BACKEND_03"]
+          duration: "2d"
+          deliverables:
+            - "Plotly.js library added (e.g., via CDN or static file)"
+            - "Basic heatmap template/view (e.g., templates/core/heatmap.html)"
+            - "JavaScript to fetch data from DRF endpoint"
+            - "JavaScript to render initial Plotly heatmap (Nifty 500)"
+          subtasks:
+            - "Include Plotly.js in base.html or heatmap template"
+            - "Create a Django view to render heatmap.html"
+            - "Add URL route for the heatmap view"
+            - "Write JS (in static/js/main.js or similar) to use `fetch` API"
+            - "Parse API response and format for Plotly"
+            - "Use `Plotly.newPlot` to render the chart in a designated div"
+
+        - id: "P1_LOCAL_FRONTEND_04"
+          description: "Integrate Basic HTMX Structure"
+          owner: "Frontend/Backend"
+          dependencies: ["P1_LOCAL_FRONTEND_02"]
+          duration: "1d"
+          deliverables:
+            - "HTMX library added (e.g., via CDN or static file)"
+            - "Base template potentially including HTMX attributes for core layout"
+            - "Initial Django views potentially returning partials (if needed for structure)"
+          subtasks:
+            - "Include HTMX library script tag in base.html"
+            - "Review base template and initial views for potential HTMX structure usage (e.g., loading main content area)"
+
+
+    # --- Phase 2: Local Data Pipeline, Interactivity & DO Deployment Prep (Month 2) ---
+    - id: "P2_LOCAL_PIPELINE"
+      name: "Local Data Pipeline & Background Tasks"
+      tasks:
+        - id: "P2_LOCAL_PIPELINE_01"
+          description: "Setup Local Celery & Redis"
+          owner: "Backend/DevOps"
+          dependencies: ["P1_LOCAL_ENV_01"]
+          duration: "1d"
+          deliverables:
+            - "Redis installed and running locally"
+            - "Celery package installed"
+            - "Celery configured in Django project (celery.py, settings)"
+            - "Local Celery worker can be started"
+          subtasks:
+            - "Install Redis locally"
+            - "Run local Redis server"
+            - "Install celery[redis] package"
+            - "Create project/celery.py configuration file"
+            - "Update project/__init__.py to load Celery app"
+            - "Configure CELERY_BROKER_URL in settings (using local Redis URL)"
+            - "Test starting a local worker: celery -A heatmaps worker -l info"
+
+        - id: "P2_LOCAL_PIPELINE_02"
+          description: "Implement Scheduled Data Fetching Task"
+          owner: "Backend"
+          dependencies: ["P2_LOCAL_PIPELINE_01", "P1_LOCAL_BACKEND_02"]
+          duration: "2d"
+          deliverables:
+            - "Celery task defined to run YFinance fetching logic"
+            - "Celery Beat configured for daily schedule"
+            - "Task successfully runs on schedule (local testing)"
+          subtasks:
+            - "Create apps/core/tasks.py"
+            - "Define a Celery task (@shared_task) wrapping the fetching logic"
+            - "Configure Celery Beat schedule in settings (e.g., CELERY_BEAT_SCHEDULE)"
+            - "Test running the task manually: task.delay()"
+            - "Test running Celery Beat locally: celery -A heatmaps beat -l info"
+
+        - id: "P2_LOCAL_PIPELINE_03"
+          description: "Integrate Pandas for Metric Calculation"
+          owner: "Backend"
+          dependencies: ["P2_LOCAL_PIPELINE_02"]
+          duration: "2d"
+          deliverables:
+            - "Pandas package installed"
+            - "Logic added (likely within Celery task) to calculate metrics (volatility, momentum) using Pandas"
+            - "Metrics stored in database models"
+          subtasks:
+            - "Install pandas"
+            - "Modify data fetching/processing task to use Pandas DataFrames"
+            - "Implement calculations for required metrics"
+            - "Update models or add fields if necessary to store metrics"
+            - "Update logic to save calculated metrics"
+
+        - id: "P2_LOCAL_PIPELINE_04"
+          description: "Implement Basic Pipeline Error Handling"
+          owner: "Backend"
+          dependencies: ["P2_LOCAL_PIPELINE_02"]
+          duration: "1d"
+          deliverables:
+            - "Enhanced try/except blocks in fetching/processing tasks"
+            - "Logging of errors during pipeline execution"
+          subtasks:
+            - "Review Celery task logic for potential failure points"
+            - "Add more specific exception handling"
+            - "Use Python's logging module within tasks to report errors"
+            - "Configure basic logging in settings.py if not already done"
+
+    - id: "P2_LOCAL_INTERACTIVITY"
+      name: "Local Frontend Interactivity (HTMX)"
+      tasks:
+        - id: "P2_LOCAL_INTERACTIVITY_01"
+          description: "Implement HTMX Filters (Index/Sector)"
+          owner: "Frontend/Backend"
+          dependencies: ["P1_LOCAL_FRONTEND_04", "P1_LOCAL_BACKEND_03"]
+          duration: "2d"
+          deliverables:
+            - "HTML controls (buttons/select) for filtering"
+            - "HTMX attributes (e.g., hx-get, hx-target) on controls"
+            - "Backend API endpoint/view adjusted to handle filter parameters"
+            - "Backend view returns updated heatmap partial/data"
+            - "Heatmap updates dynamically on filter selection (local testing)"
+          subtasks:
+            - "Add filter controls to heatmap template"
+            - "Add HTMX attributes to trigger requests on change/click"
+            - "Update DRF view/serializer or create new view to accept filter params"
+            - "Update view logic to filter data based on params"
+            - "Ensure view returns appropriate HTML partial or data for Plotly update"
+            - "Adjust JS if needed to re-render Plotly with new data"
+
+        - id: "P2_LOCAL_INTERACTIVITY_02"
+          description: "Implement HTMX Stock Detail Display"
+          owner: "Frontend/Backend"
+          dependencies: ["P1_LOCAL_FRONTEND_04", "P1_LOCAL_BACKEND_03"]
+          duration: "1d"
+          deliverables:
+            - "Mechanism to trigger detail request (e.g., click on heatmap element)"
+            - "HTMX attributes to fetch details for a specific stock"
+            - "Backend view to return stock detail partial"
+            - "Target element on page to display details"
+            - "Details update dynamically on interaction (local testing)"
+          subtasks:
+            - "Add HTMX attributes to Plotly elements (might require JS interaction) or separate list"
+            - "Create a Django view to fetch and render details for one stock"
+            - "Create an HTML partial template for stock details"
+            - "Add URL route for the detail view"
+            - "Add target div in the main template"
+            - "Configure HTMX attributes (e.g., hx-get, hx-target, hx-swap)"
+
+    - id: "P2_DEPLOY_PREP"
+      name: "Deployment Preparation"
+      tasks:
+        - id: "P2_DEPLOY_PREP_01"
+          description: "Prepare Production Settings"
+          owner: "Backend/DevOps"
+          dependencies: ["P1_LOCAL_ENV_02"]
+          duration: "1d"
+          deliverables:
+            - "settings/prod.py file created"
+            - "Production settings configured (DEBUG=False, SECRET_KEY from env, etc.)"
+            - "ALLOWED_HOSTS configured via environment variable"
+            - "Security middleware settings reviewed/set for production"
+            - "Static files settings for production (whitenoise or DO Spaces prep)"
+            - "Database configured via DATABASE_URL environment variable"
+          subtasks:
+            - "Create prod.py importing from base.py"
+            - "Set DEBUG=False"
+            - "Ensure SECRET_KEY is loaded from os.environ"
+            - "Configure ALLOWED_HOSTS using os.environ"
+            - "Review/set SECURE_SSL_REDIRECT, SESSION_COOKIE_SECURE etc."
+            - "Configure staticfiles storage for production (e.g., setup django-storages for S3/Spaces)"
+            - "Ensure DATABASES uses dj_database_url and will read DATABASE_URL env var"
+
+        - id: "P2_DEPLOY_PREP_02"
+          description: "Prepare Deployment Artifacts"
+          owner: "DevOps"
+          dependencies: ["P2_DEPLOY_PREP_01"]
+          duration: "1d"
+          deliverables:
+            - "Finalized requirements.txt (including gunicorn/whitenoise if needed)"
+            - "Procfile for DigitalOcean App Platform"
+            - "(Optional) Dockerfile if using container deployment"
+            - "Documentation on required environment variables for production"
+          subtasks:
+            - "Review/update requirements.txt for production dependencies"
+            - "Create Procfile defining web process (e.g., `web: gunicorn heatmaps.wsgi --log-file -`)"
+            - "Define required env vars (DATABASE_URL, SECRET_KEY, DJANGO_SETTINGS_MODULE=heatmaps.settings.prod, etc.)"
+
+
+    - id: "P2_DEPLOY_DO"
+      name: "Initial DigitalOcean Deployment (End of Phase 2)"
+      tasks:
+        - id: "P2_DEPLOY_DO_01"
+          description: "Provision DigitalOcean Resources"
+          owner: "DevOps"
+          dependencies: ["P2_DEPLOY_PREP_02"]
+          duration: "1d"
+          deliverables:
+            - "DigitalOcean Managed PostgreSQL database created"
+            - "DigitalOcean Spaces bucket created (for static files)"
+            - "DigitalOcean App Platform app created and connected to Git repo"
+          subtasks:
+            - "Create Managed DB instance on DO"
+            - "Create Spaces bucket and configure CDN/permissions"
+            - "Create App Platform app, link to GitHub/GitLab repo"
+
+        - id: "P2_DEPLOY_DO_02"
+          description: "Configure App Platform Environment"
+          owner: "DevOps"
+          dependencies: ["P2_DEPLOY_DO_01"]
+          duration: "1d"
+          deliverables:
+            - "Environment variables set in App Platform (DATABASE_URL, SECRET_KEY, DJANGO_SETTINGS_MODULE, etc.)"
+            - "Build command configured (if needed)"
+            - "Run command configured (using Procfile)"
+            - "Database connection configured within App Platform"
+          subtasks:
+            - "Add required environment variables via DO App Platform UI/CLI"
+            - "Ensure App Platform detects Procfile or configure run command"
+            - "Configure DB details or connection string in App Platform"
+
+        - id: "P2_DEPLOY_DO_03"
+          description: "Deploy Application to App Platform"
+          owner: "DevOps"
+          dependencies: ["P2_DEPLOY_DO_02"]
+          duration: "1d"
+          deliverables:
+            - "Successful initial build and deployment on App Platform"
+            - "Application accessible via DO URL"
+            - "Initial database migrations run on DO database"
+          subtasks:
+            - "Trigger deployment (usually via git push)"
+            - "Monitor build logs"
+            - "Access deployed app URL"
+            - "Run migrations on the deployed app (e.g., via App Platform console: `python manage.py migrate`)"
+
+        - id: "P2_DEPLOY_DO_04"
+          description: "Configure Static Files on DO Spaces"
+          owner: "DevOps"
+          dependencies: ["P2_DEPLOY_DO_03", "P2_DEPLOY_PREP_01"]
+          duration: "1d"
+          deliverables:
+            - "django-storages configured for DO Spaces"
+            - "Static files collected and uploaded to Spaces bucket"
+            - "Deployed application serves static files from Spaces CDN"
+          subtasks:
+            - "Install django-storages and boto3"
+            - "Configure settings.py for DO Spaces (AWS_* settings mapping to Spaces)"
+            - "Set STATICFILES_STORAGE to the S3/Spaces backend"
+            - "Set required environment variables for Spaces keys/bucket/endpoint"
+            - "Run `python manage.py collectstatic` (locally pointing to DO bucket, or as part of deployment build)"
+            - "Verify static files load correctly from CDN URL on deployed app"
+
+        - id: "P2_DEPLOY_DO_05"
+          description: "Add Deployment Verification Checks"
+          owner: "QA/DevOps"
+          dependencies: ["P2_DEPLOY_DO_03", "P2_DEPLOY_DO_04"]
+          duration: "<1d"
+          deliverables:
+            - "Basic checklist or automated smoke tests for deployed app"
+          subtasks:
+            - "Verify key pages load (homepage, heatmap)"
+            - "Verify static assets load correctly"
+            - "Verify basic API endpoint responds"
+            - "Check logs for critical startup errors"
+
+
+  # critical_path and quality_gates would need to be redefined based on this new structure
+  # risk_mitigation would also need review, potentially adding deployment risks

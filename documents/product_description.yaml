@@ -1,0 +1,89 @@
+product_description_document:
+  product_name: "Vortex - Indian Market Heatmap MVP"
+  product_type: "Progressive Web Application"
+  technology_stack:
+    backend:
+      framework: "Django 4.2"
+      language: "Python 3.10"
+      api_framework: "Django REST Framework"
+      caching: "Django Database Cache"
+    frontend:
+      styling: "Tailwind CSS"
+      interactivity: "HTMX + vanilla JS"
+      visualization: "Plotly.js (SVG rendering)"
+    database:
+      primary_db: "PostgreSQL (DigitalOcean Managed Database)"
+    hosting:
+      cloud_provider: "DigitalOcean"
+      services:
+        - "App Platform"
+        - "Managed PostgreSQL"
+        - "Spaces (static assets)"
+  overview:
+    description: |
+      Lightweight stock heatmap platform for Indian markets with essential visualization.
+      HTMX-driven interactivity with zero client-side frameworks.
+    target_audience:
+      - Retail Investors
+      - Financial Media
+    monetization_strategy:
+      type: "Basic AdSense Integration"
+  core_features:
+    dynamic_heatmap_visualizations:
+      market_coverage:
+        - "Nifty 500"
+        - "Sector indices"
+      essential_metrics:
+        volatility_index: "20-day rolling (cached daily)"
+        momentum_gradient: "13/26-week (precomputed)"
+      timeframe_flexibility:
+        supported_timeframes:
+          - "5-year historical"
+          - "90-day rolling"
+      interaction_patterns:
+        - "HTMX-powered filter updates"
+        - "Partial page reloads for metrics"
+    data_pipeline:
+      data_sources: "Yahoo Finance API"
+      processing: "Pandas (batch processing)"
+    responsive_ui_ux:
+      progressive_enhancement:
+        - "Install prompt for PWA"
+        - "Network-aware fallbacks"
+  technical_architecture:
+    backend_optimizations:
+      - "Materialized views for complex queries"
+      - "HTTP Cache-Control headers"
+      - "Database-backed session storage"
+      - "Gzip compression middleware"
+    frontend_architecture:
+      htmx_patterns:
+        - "Boost for progressive enhancement"
+        - "History cache for back-button support"
+        - "Out of band swaps for parallel updates"
+  deployment_and_hosting:
+    digitalocean_setup:
+      - "App Platform Basic Tier ($12/mo)"
+      - "Managed PostgreSQL ($15/mo)"
+      - "Spaces CDN ($5/mo)"
+  scalability_considerations:
+    future_proofing:
+      - "Redis-compatible caching interface (add later)"
+      - "API endpoints pre-optimized for mobile"
+    forbidden_features:
+      - "No user-generated content"
+      - "No real-time updates"
+
+# Key Simplifications for 100k/Month Traffic
+performance_guarantees:
+  - "Handles 3,300 daily visits (~138/hr peak)"
+  - "1s Time-to-Interactive (TTI) with HTMX"
+  - "Database cache hits: ~85% via materialized views"
+  - "Static assets served via CDN (Spaces)"
+
+cost_breakdown:
+  monthly_estimate: $32
+  components:
+    - "App Platform: $12"
+    - "PostgreSQL: $15"
+    - "Spaces: $5"

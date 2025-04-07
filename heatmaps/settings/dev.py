@@ -1,37 +1,31 @@
-# heatmaps/heatmaps/settings/dev.py
+import os
+from .base import BASE_DIR
+from dotenv import load_dotenv
+import dj_database_url
 
-from .base import *
+# Load environment variables from .env file
+load_dotenv()
 
-print("Loading development settings...")
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.getenv(
+    "SECRET_KEY",
+    # Use a less predictable fallback key for development
+    "django-insecure-fallback-key-for-dev-" "!ty!p%v12@gxek#9gz4=k-hc$z_&02-(rw0a",
+)
 
-DEBUG = True
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = os.getenv("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
-# Database configuration for development
+# Database
+# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+
+# Use dj-database-url to parse the DATABASE_URL environment variable
+# Default to a local SQLite database if DATABASE_URL is not set
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('DB_NAME_DEV'),
-        'USER': env('DB_USER_DEV'),
-        'PASSWORD': env('DB_PASSWORD_DEV'),
-        'HOST': env('DB_HOST_DEV'),
-        'PORT': env('DB_PORT_DEV'),
-    }
+    "default": dj_database_url.config(default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
 }
 
-print(f"Database settings: {DATABASES['default']}")
-
-# Static files configuration
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [
-    os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'static'),
-]
-
-print(f"Static files directories: {STATICFILES_DIRS}")
-print(f"Base directory: {BASE_DIR}")
-
-# Media files configuration
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
+# Add any development-specific settings here, like email backend
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
