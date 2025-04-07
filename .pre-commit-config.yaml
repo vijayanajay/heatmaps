@@ -1,0 +1,13 @@
+repos:
+-   repo: https://github.com/psf/black
+    rev: 24.8.0 # Use a recent stable version
+    hooks:
+    -   id: black
+        language_version: python3.9 # Specify your Python version
+
+# -   repo: https://github.com/PyCQA/flake8
+#     rev: 7.1.0 # Use a recent stable version
+#     hooks:
+#     -   id: flake8
+#         # Optional: Configure Flake8 further if needed, e.g., exclude dirs or increase line length
+#         # args: [--max-line-length=88, --extend-ignore=E203] 

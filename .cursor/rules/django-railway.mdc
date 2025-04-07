@@ -1,0 +1,256 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: "Vortex IDE Rules - Django + Vanilla JS/Plotly on Heroku/Neon (Phase 1)"
+globs: ["*.py", "*.html", "*.js", "Procfile", "*.ini", "*.yaml"]
+rules: 
+  - dev machine is on windows, so all commands should possible to execute in windows 11 powershell
+  - all code should be thought, analyzed and written with the mindset of great developers like Sindre Sorhus, Ryan Dahl, Dan Abramov, Armin Ronacher, Kenneth Reitz
+  - read memory.md in the root directory with the errors that occured before and ensure it does not happen again
+  - update memory.md with the errors you encountered, the root cause and the fix, so that it does not occur again. If file does not exist in root, create a new file. Ensure that these errors don't occur again
+alwaysApply: true
+
+## 📜 Core Philosophy
+ 
+1.  **Simplicity:** Prioritize simple, clear, and maintainable solutions. Avoid unnecessary complexity or over-engineering.
+2.  **Iterate:** Prefer iterating on existing, working code rather than building entirely new solutions from scratch, unless fundamentally necessary or explicitly requested.
+3.  **Focus:** Concentrate efforts on the specific task assigned. Avoid unrelated changes or scope creep.
+4.  **Quality:** Strive for a clean, organized, well-tested, and secure codebase.
+5.  **Collaboration:** This document guides both human developers and the AI assistant for effective teamwork.
+ 
+## 📚 Project Context & Understanding
+ 
+1.  **Documentation First:**
+    *   **Always** check for and thoroughly review relevant project documentation *before* starting any task. This includes:
+        *   Product Requirements Documents (PRDs)
+        *   `README.md` (Project overview, setup, patterns, technology stack)
+        *   `docs/architecture.md` (System architecture, component relationships)
+        *   `docs/technical.md` (Technical specifications, established patterns)
+        *   `tasks/tasks.md` (Current development tasks, requirements)
+    *   If documentation is missing, unclear, or conflicts with the request, **ask for clarification**.
+2.  **Architecture Adherence:**
+    *   Understand and respect module boundaries, data flow, system interfaces, and component dependencies outlined in `docs/architecture.md`.
+    *   Validate that changes comply with the established architecture. Warn and propose compliant solutions if a violation is detected.
+3.  **Pattern & Tech Stack Awareness:**
+    *   Reference `README.md` and `docs/technical.md` to understand and utilize existing patterns and technologies.
+    *   Exhaust options using existing implementations before proposing new patterns or libraries.
+ 
+ 
+## ⚙️ Task Execution & Workflow
+ 
+1.  **Task Definition:**
+    *   Clearly understand the task requirements, acceptance criteria, and any dependencies from `tasks/tasks.md` and the PRD.
+2.  **Systematic Change Protocol:** Before making significant changes:
+    *   **Identify Impact:** Determine affected components, dependencies, and potential side effects.
+    *   **Plan:** Outline the steps. Tackle one logical change or file at a time.
+    *   **Verify Testing:** Confirm how the change will be tested. Add tests if necessary *before* implementing (see TDD).
+3.  **Progress Tracking:**
+    *   Keep `docs/status.md` updated with task progress (in-progress, completed, blocked), issues encountered, and completed items.
+    *   Update `tasks/tasks.md` upon task completion or if requirements change during implementation.
+ 
+## 🤖 AI Collaboration & Prompting
+ 
+1.  **Clarity is Key:** Provide clear, specific, and unambiguous instructions to the AI. Define the desired outcome, constraints, and context.
+2.  **Context Referencing:** If a task spans multiple interactions, explicitly remind the AI of relevant previous context, decisions, or code snippets.
+3.  **Suggest vs. Apply:** Clearly state whether the AI should *suggest* a change for human review or *apply* a change directly (use only when high confidence and task is well-defined). Use prefixes like "Suggestion:" or "Applying fix:".
+4.  **Question AI Output:** Human developers should critically review AI-generated code. Question assumptions, verify logic, and don't blindly trust confident-sounding but potentially incorrect suggestions (hallucinations).
+5.  **Focus the AI:** Guide the AI to work on specific, focused parts of the task. Avoid overly broad requests that might lead to architectural or logical errors.
+6.  **Leverage Strengths:** Use the AI for tasks it excels at (boilerplate generation, refactoring specific patterns, finding syntax errors, generating test cases) but maintain human oversight for complex logic, architecture, and security.
+7.  **Incremental Interaction:** Break down complex tasks into smaller steps for the AI. Review and confirm each step before proceeding.
+8.  **Standard Check-in (for AI on large tasks):** Before providing significant code suggestions:
+    *   "Confirming understanding: I've reviewed [specific document/previous context]. The goal is [task goal], adhering to [key pattern/constraint]. Proceeding with [planned step]."
+
+## ✅ Testing & Validation
+ 
+1.  **Test-Driven Development (TDD):**
+    *   **New Features:** Outline tests, write failing tests, implement code, refactor.
+    *   **Bug Fixes:** Write a test reproducing the bug *before* fixing it.
+2.  **Comprehensive Tests:** Write thorough unit, integration, and/or end-to-end tests covering critical paths, edge cases, and major functionality.
+3.  **Tests Must Pass:** All tests **must** pass before committing or considering a task complete. Notify the human developer immediately if tests fail and cannot be easily fixed.
+4.  **No Mock Data (Except Tests):** Use mock data *only* within test environments. Development and production should use real or realistic data sources.
+5.  **Manual Verification:** Supplement automated tests with manual checks where appropriate, especially for UI changes.
+ 
+## 🐛 Debugging & Troubleshooting
+ 
+1.  **Fix the Root Cause:** Prioritize fixing the underlying issue causing an error, rather than just masking or handling it, unless a temporary workaround is explicitly agreed upon.
+2.  **Console/Log Analysis:** Always check browser and server console output for errors, warnings, or relevant logs after making changes or when debugging. Report findings.
+3.  **Targeted Logging:** For persistent or complex issues, add specific `console.log` statements (or use a project logger) to trace execution and variable states. *Remember to check the output.*
+4.  **Check the `fixes/` Directory:** Before deep-diving into a complex or recurring bug, check `fixes/` for documented solutions to similar past issues.
+5.  **Document Complex Fixes:** If a bug requires significant effort (multiple iterations, complex logic) to fix, create a concise `.md` file in the `fixes/` directory detailing the problem, investigation steps, and the solution. Name it descriptively (e.g., `fixes/resolve-race-condition-in-user-update.md`).
+6.  **Research:** Use available tools (Firecrawl, documentation search, etc.) to research solutions or best practices when stuck or unsure.
+
+
+### Phase 1: Directory Structure
+# Based on plan.yaml P1-DEV-ENV-02 and common Django practice
+directory_structure:
+  structure:
+    root:
+      - "manage.py"
+      - "requirements.txt"
+      - "README.md"
+      - ".env.example"
+      - ".env" # Should be gitignored
+      - ".gitignore"
+      - "Procfile" # Added for Heroku
+      - "pytest.ini" # Added for testing
+      - ".pre-commit-config.yaml" # Added for tooling
+      - "heatmaps/": # Django project directory
+          - "__init__.py"
+          - "settings/": ["__init__.py", "base.py", "dev.py", "prod.py"]
+          - "urls.py"
+          - "wsgi.py"
+          - "asgi.py"
+      - "apps/":
+          - "core/": # Main application
+              - "__init__.py"
+              - "admin.py"
+              - "apps.py"
+              - "models.py"
+              - "views.py" # Standard Django views + API views (DRF or basic)
+              - "urls.py"
+              - "serializers.py" # If using DRF for API
+              - "services.py" # For business logic like YFinance fetcher
+              - "tests.py"
+              - "management/":
+                  - "__init__.py"
+                  - "commands/":
+                      - "__init__.py"
+                      # - "fetch_stock_data.py" # Example command
+      - "templates/":
+          - "base.html"
+          - "core/": # App-specific templates
+              - "heatmap_page.html"
+          # Removed includes/htmx/
+      - "static/":
+          - "css/": ["styles.css"]
+          - "js/":
+              - "main.js" # Main Vanilla JS file
+              - "vendor/": ["plotly-basic.min.js"] # Example vendor JS
+      # Removed media/ for Phase 1 (unless needed)
+      # Removed .ebextensions/
+
+### Phase 1: Backend Architecture (Django Core)
+component_architecture:
+  rules:
+    - "Use Django settings split (base.py, dev.py, prod.py)."
+    - "Store secrets and environment-specific configs in .env files (using python-dotenv)."
+    - "Use dj-database-url for database configuration."
+    - "Separate business logic from views into service layers (e.g., `apps/core/services.py`)."
+    - "Implement API endpoints using DRF (preferred) or standard Django JsonResponse."
+    - "Use management commands for data fetching/processing tasks."
+
+### Phase 1: Frontend Architecture (Vanilla JS + Plotly)
+frontend_architecture:
+  rules:
+    - "Structure JS code logically within `static/js/main.js` or break into modules if complexity increases."
+    - "Fetch data asynchronously using the `fetch` API."
+    - "Handle loading and error states gracefully in the UI."
+    - "Integrate Plotly.js for visualizations, using WebGL where appropriate for performance."
+    - "Minimize direct DOM manipulation where possible, update based on data state."
+    - "Ensure basic responsiveness using CSS (Flexbox/Grid)."
+
+### Phase 1: Database (PostgreSQL on Neon.tech)
+database_rules:
+  rules:
+    - "Define clear Django models in `apps/core/models.py`."
+    - "Use appropriate field types (e.g., `DecimalField` for currency/prices)."
+    - "Generate migrations using `makemigrations` and apply using `migrate`."
+    - "Optimize database queries using `select_related` and `prefetch_related` where necessary, especially in API views."
+    - "Configure connection via `DATABASE_URL` environment variable (handled by dj-database-url)."
+
+### Phase 1: Caching
+caching_rules:
+  rules:
+    - "Implement basic API response caching using Django's cache framework (`django.core.cache`)."
+    - "Use `LocMemCache` for local development."
+    - "Plan for a proper cache backend (like Redis via Heroku add-on) for later phases."
+
+### Phase 1: Testing
+test_organization:
+  structure:
+    - "apps/core/tests.py" # Initial tests co-located with app
+    # - "tests/" # Separate top-level tests dir can be added later
+  rules:
+    - "Use `pytest` and `pytest-django` for running tests."
+    - "Write unit tests for models and services."
+    - "Write integration tests for API endpoints using `APITestCase` or `APIClient`."
+    - "Aim for reasonable test coverage of core logic."
+    - "Mock external services like YFinance during tests."
+
+### Phase 1: CI/CD (GitHub Actions + Heroku)
+cicd:
+  rules:
+    - "Use GitHub Actions for CI."
+    - "Configure workflow to run tests (pytest) on push/pull_request."
+    - "Configure workflow to automatically deploy to Heroku staging/production based on branch strategy (e.g., main branch -> production)."
+    - "Use `heroku-deploy` action for deployment."
+    - "Manage Heroku environment variables via Heroku dashboard or CLI, not in Git."
+    - "Include a `Procfile` for Heroku web process."
+
+### Phase 1: Monitoring & Logging
+monitoring:
+  rules:
+    - "Implement standard Python/Django logging, outputting to console (Heroku captures stdout/stderr)."
+    - "Configure log levels appropriately for dev vs. prod (`settings/dev.py`, `settings/prod.py`)."
+    - "Implement a basic `/health/` check endpoint."
+    - "Utilize Heroku's built-in metrics and logging via dashboard or CLI (`heroku logs --tail`)."
+    # - "Plan for integrating a dedicated monitoring service (e.g., Sentry) in later phases (PDD Phase 4+)."
+
+### Phase 1: Security
+security_evolution:
+  - "Use HTTPS (handled by Heroku)."
+  - "Configure Django's built-in security middleware (`settings/prod.py`: `SECURE_SSL_REDIRECT`, `SESSION_COOKIE_SECURE`, etc.)."
+  - "Keep `SECRET_KEY` secure using environment variables."
+  - "Set `DEBUG=False` in production."
+  - "Use environment variables for all sensitive credentials (DB URL, API keys)."
+
+### Phase 1: Documentation Links
+references:
+  - "Django Documentation (4.2)"
+  - "Plotly.js Documentation"
+  - "Heroku Dev Center"
+  - "Neon.tech Documentation"
+  - "Python `dotenv` Documentation"
+  - "dj-database-url Documentation"
+  # Removed AWS references
+
+# --- HTMX Sections (Commented out/Removed for Phase 1) ---
+# Relevant for Phase 6+ based on phased_pdd.yaml
+
+# ### HTMX-Specific Architecture
+# component_architecture: ...
+# ### HTMX Design Patterns
+# design_patterns: ...
+# ### HTMX File Naming
+# file_naming: ...
+# ### HTMX State Management
+# state_management: ...
+# ### HTMX Security
+# security_evolution: ... (Merge Phase 1 security above)
+# ### HTMX Optimization
+# optimization: ...
+# ### HTMX Testing
+# test_organization: ... (Merge Phase 1 testing above)
+# unit_testing: ...
+# integration_testing: ...
+# ### HTMX Error Handling
+# error_handling: ...
+# ### HTMX Template Guidelines
+# rendering_optimization: ...
+# ### HTMX Documentation Standards
+# documentation: ...
+# ### HTMX Performance Audit
+# performance_metrics: ...
+# ### HTMX Anti-Patterns
+# antipatterns: ...
+# ### HTMX CI/CD
+# cicd: ... (Merge Phase 1 CI/CD above)
+# ### HTMX Monitoring
+# monitoring: ... (Merge Phase 1 Monitoring above)
+# ### HTMX Code Style
+# linting: ...
+# ### HTMX Documentation Links
+# references: ... (Merge Phase 1 References above)
