@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Stock Heatmaps{% endblock title %}</title>
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+    {% block extra_head %}{% endblock extra_head %}
+</head>
+<body class="bg-gray-100 text-gray-900 font-sans">
+
+    <nav class="bg-blue-600 text-white p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold hover:text-blue-200">TrendTribes Heatmaps</a>
+            <div>
+                <!-- Add nav links here if needed -->
+                <!-- <a href="#" class="px-3 py-2 hover:bg-blue-700 rounded">Link 1</a> -->
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-4 mt-4">
+        {% block content %}
+        <!-- Page content goes here -->
+        <p>Welcome to the base template!</p>
+        {% endblock content %}
+    </main>
+
+    <footer class="mt-8 text-center text-gray-600 text-sm">
+        <p>&copy; {% now "Y" %} TrendTribes. All rights reserved.</p>
+    </footer>
+
+    <!-- Include JS files here -->
+    <!-- <script src="{% static 'js/main.js' %}"></script> -->
+    {% block extra_scripts %}{% endblock extra_scripts %}
+</body>
+</html> 
