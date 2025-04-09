@@ -1,5 +1,7 @@
 import os
-from .base import BASE_DIR
+
+# from .base import BASE_DIR # Removed explicit import
+from .base import *  # noqa: F403, F405 # Restore star import with noqa
 from dotenv import load_dotenv
 import dj_database_url
 
@@ -29,3 +31,8 @@ DATABASES = {
 
 # Add any development-specific settings here, like email backend
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# Django Debug Toolbar settings
+INTERNAL_IPS = [
+    "127.0.0.1",
+]

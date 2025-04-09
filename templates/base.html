@@ -31,8 +31,17 @@
         <p>&copy; {% now "Y" %} TrendTribes. All rights reserved.</p>
     </footer>
 
-    <!-- Include JS files here -->
-    <!-- <script src="{% static 'js/main.js' %}"></script> -->
+    <!-- Include Plotly.js from CDN (Use specific recent version) -->
+    <script src='https://cdn.plot.ly/plotly-2.32.0.min.js'></script>
+
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+
+    <!-- AlpineJS (defer recommended) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Include project-specific JS files here -->
+    <!-- <script src="{% static 'js/main.js' %}"></script> --> <!-- Keep commented -->
     {% block extra_scripts %}{% endblock extra_scripts %}
 </body>
 </html> 

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Stock Market Heatmap{% endblock title %}
+
+{% block content %}
+<h1 class="text-2xl font-semibold mb-4 text-gray-800">Market Heatmap</h1>
+
+{# Put JSON data into a script tag #}
+<script type="application/json" id="plotly-figure-data">
+    {{ figure_json|safe }}
+</script>
+
+<div class="bg-white p-6 rounded shadow-md">
+    {# Div to hold the chart, init Alpine component without passing data directly #}
+    <div id="heatmapDiv" 
+         class="h-96" 
+         x-data="plotlyChart()" 
+         x-init="initChart('heatmapDiv', 'plotly-figure-data')">
+        {# Chart will be drawn here by Alpine #}
+    </div>
+
+    {# Debugging section removed #}
+    <!-- <div class="mt-4 p-4 bg-gray-200 rounded overflow-auto text-xs">
+        <h3 class="font-semibold mb-2">Plotly Figure JSON Data:</h3>
+        <pre>{{ figure_json }}</pre>
+    </div> -->
+</div>
+{% endblock content %}
+
+{% block extra_scripts %}
+{# Updated script for Alpine component #}
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('plotlyChart', () => ({
+        figure: null, // Initialize figure as null
+        initChart(elementId, dataScriptId) {
+            const dataEl = document.getElementById(dataScriptId);
+            const targetEl = document.getElementById(elementId);
+            if (!dataEl || !targetEl) {
+                console.error('Cannot find chart element or data script element.');
+                return;
+            }
+            try {
+                // Parse the JSON data from the script tag
+                this.figure = JSON.parse(dataEl.textContent);
+                this.drawChart(targetEl); // Call drawChart after parsing
+            } catch (e) {
+                console.error('Error parsing Plotly JSON data:', e);
+                targetEl.innerHTML = '<p class="text-center text-red-500">Error loading chart data.</p>';
+            }
+        },
+        drawChart(element) { // Now takes the element directly
+            if (!this.figure || !this.figure.data || this.figure.data.length === 0) {
+                console.warn('No data available for Plotly chart.');
+                element.innerHTML = '<p class="text-center text-gray-500">No data available to display.</p>';
+                return;
+            }
+            // console.log("Drawing Plotly chart with data:", this.figure); // Removed console log
+            // Ensure the target element is cleared before drawing
+            element.innerHTML = ''; 
+            Plotly.newPlot(element, this.figure.data, this.figure.layout);
+        }
+    }))
+})
+</script>
+{% endblock extra_scripts %} 

@@ -155,6 +155,7 @@ phase_1_and_2_implementation: # Renamed to reflect combined phases
           owner: "Frontend"
           dependencies: ["P1_LOCAL_ENV_02"]
           duration: "1d"
+          status: completed
           deliverables:
             - "Node.js/npm installed"
             - "Tailwind CSS installed via npm"
@@ -176,6 +177,7 @@ phase_1_and_2_implementation: # Renamed to reflect combined phases
           owner: "Frontend"
           dependencies: ["P1_LOCAL_FRONTEND_01"]
           duration: "1d"
+          status: completed
           deliverables:
             - "Base HTML template (templates/base.html) with Tailwind CSS link"
             - "Static directory structure (static/css, static/js, static/images)"
@@ -188,35 +190,40 @@ phase_1_and_2_implementation: # Renamed to reflect combined phases
             - "Run initial Tailwind build to generate CSS"
 
         - id: "P1_LOCAL_FRONTEND_03"
-          description: "Implement Basic Plotly.js Visualization"
-          owner: "Frontend"
-          dependencies: ["P1_LOCAL_FRONTEND_02", "P1_LOCAL_BACKEND_03"]
+          description: "Implement Basic Plotly.js Visualization via Server Config"
+          owner: "Frontend/Backend"
+          dependencies: ["P1_LOCAL_FRONTEND_02", "P1_LOCAL_BACKEND_01"]
           duration: "2d"
+          status: completed
           deliverables:
             - "Plotly.js library added (e.g., via CDN or static file)"
-            - "Basic heatmap template/view (e.g., templates/core/heatmap.html)"
-            - "JavaScript to fetch data from DRF endpoint"
-            - "JavaScript to render initial Plotly heatmap (Nifty 500)"
+            - "Basic heatmap template (templates/core/heatmap_page.html)"
+            - "Django view prepares Plotly JSON config and passes it in context"
+            - "Template embeds Plotly JSON config (e.g., in script tag)"
+            - "Alpine.js component or minimal JS snippet initializes Plotly from embedded config"
           subtasks:
             - "Include Plotly.js in base.html or heatmap template"
-            - "Create a Django view to render heatmap.html"
-            - "Add URL route for the heatmap view"
-            - "Write JS (in static/js/main.js or similar) to use `fetch` API"
-            - "Parse API response and format for Plotly"
-            - "Use `Plotly.newPlot` to render the chart in a designated div"
+            - "Update Django view (heatmap_page) to fetch data (e.g., Stocks) and generate Plotly trace/layout JSON"
+            - "Pass Plotly JSON config to template context"
+            - "Modify heatmap_page.html to include a div for the chart and a script tag to hold the JSON config"
+            - "Write minimal JS (or Alpine component) to parse embedded JSON and call Plotly.newPlot"
+            - "Add URL route for the heatmap view (already done)"
 
         - id: "P1_LOCAL_FRONTEND_04"
-          description: "Integrate Basic HTMX Structure"
+          description: "Integrate Basic HTMX & Alpine.js"
           owner: "Frontend/Backend"
           dependencies: ["P1_LOCAL_FRONTEND_02"]
           duration: "1d"
+          status: completed
           deliverables:
             - "HTMX library added (e.g., via CDN or static file)"
-            - "Base template potentially including HTMX attributes for core layout"
-            - "Initial Django views potentially returning partials (if needed for structure)"
+            - "Alpine.js library added (e.g., via CDN or static file)"
+            - "Base template includes HTMX/Alpine attributes for core layout/initial load (if needed)"
           subtasks:
             - "Include HTMX library script tag in base.html"
-            - "Review base template and initial views for potential HTMX structure usage (e.g., loading main content area)"
+            - "Include Alpine.js library script tag in base.html (defer recommended)"
+            - "Review base template and initial views for potential HTMX enhancement (e.g., `hx-boost`)"
+            - "Add basic Alpine.js usage if needed for simple toggles/state (e.g., `x-data`)"
 
 
     # --- Phase 2: Local Data Pipeline, Interactivity & DO Deployment Prep (Month 2) ---
@@ -228,6 +235,7 @@ phase_1_and_2_implementation: # Renamed to reflect combined phases
           owner: "Backend/DevOps"
           dependencies: ["P1_LOCAL_ENV_01"]
           duration: "1d"
+          status: pending
           deliverables:
             - "Redis installed and running locally"
             - "Celery package installed"
@@ -247,6 +255,7 @@ phase_1_and_2_implementation: # Renamed to reflect combined phases
           owner: "Backend"
           dependencies: ["P2_LOCAL_PIPELINE_01", "P1_LOCAL_BACKEND_02"]
           duration: "2d"
+          status: pending
           deliverables:
             - "Celery task defined to run YFinance fetching logic"
             - "Celery Beat configured for daily schedule"
@@ -263,6 +272,7 @@ phase_1_and_2_implementation: # Renamed to reflect combined phases
           owner: "Backend"
           dependencies: ["P2_LOCAL_PIPELINE_02"]
           duration: "2d"
+          status: pending
           deliverables:
             - "Pandas package installed"
             - "Logic added (likely within Celery task) to calculate metrics (volatility, momentum) using Pandas"
@@ -279,6 +289,7 @@ phase_1_and_2_implementation: # Renamed to reflect combined phases
           owner: "Backend"
           dependencies: ["P2_LOCAL_PIPELINE_02"]
           duration: "1d"
+          status: pending
           deliverables:
             - "Enhanced try/except blocks in fetching/processing tasks"
             - "Logging of errors during pipeline execution"
@@ -289,45 +300,45 @@ phase_1_and_2_implementation: # Renamed to reflect combined phases
             - "Configure basic logging in settings.py if not already done"
 
     - id: "P2_LOCAL_INTERACTIVITY"
-      name: "Local Frontend Interactivity (HTMX)"
+      name: "Local Frontend Interactivity (HTMX & Alpine.js)"
       tasks:
         - id: "P2_LOCAL_INTERACTIVITY_01"
           description: "Implement HTMX Filters (Index/Sector)"
           owner: "Frontend/Backend"
-          dependencies: ["P1_LOCAL_FRONTEND_04", "P1_LOCAL_BACKEND_03"]
+          dependencies: ["P1_LOCAL_FRONTEND_04", "P1_LOCAL_BACKEND_01"]
           duration: "2d"
+          status: pending
           deliverables:
-            - "HTML controls (buttons/select) for filtering"
-            - "HTMX attributes (e.g., hx-get, hx-target) on controls"
-            - "Backend API endpoint/view adjusted to handle filter parameters"
-            - "Backend view returns updated heatmap partial/data"
-            - "Heatmap updates dynamically on filter selection (local testing)"
+            - "HTML controls (buttons/select) for filtering in main template/partial"
+            - "HTMX attributes (e.g., hx-get, hx-target, hx-swap) on controls"
+            - "Backend view(s) adjusted to handle filter parameters and return filtered HTML partials"
+            - "Heatmap container updates dynamically via HTMX swap"
+            - "Alpine.js potentially used to re-initialize Plotly if needed after swap"
           subtasks:
-            - "Add filter controls to heatmap template"
-            - "Add HTMX attributes to trigger requests on change/click"
-            - "Update DRF view/serializer or create new view to accept filter params"
-            - "Update view logic to filter data based on params"
-            - "Ensure view returns appropriate HTML partial or data for Plotly update"
-            - "Adjust JS if needed to re-render Plotly with new data"
+            - "Add filter controls (e.g., form with select dropdown) to template"
+            - "Add HTMX attributes to trigger GET request on change/submit, targeting the heatmap container"
+            - "Create/Update Django view(s) to accept filter params, query data, and render ONLY the updated heatmap partial (including Plotly config script)"
+            - "Ensure the view returns the correct HTML fragment"
+            - "Add mechanism (e.g., `htmx:afterSwap` event listener or Alpine init) to re-run Plotly initialization script after HTMX swaps content"
 
         - id: "P2_LOCAL_INTERACTIVITY_02"
           description: "Implement HTMX Stock Detail Display"
           owner: "Frontend/Backend"
-          dependencies: ["P1_LOCAL_FRONTEND_04", "P1_LOCAL_BACKEND_03"]
+          dependencies: ["P1_LOCAL_FRONTEND_04", "P1_LOCAL_BACKEND_01"]
           duration: "1d"
+          status: pending
           deliverables:
-            - "Mechanism to trigger detail request (e.g., click on heatmap element)"
-            - "HTMX attributes to fetch details for a specific stock"
-            - "Backend view to return stock detail partial"
-            - "Target element on page to display details"
+            - "Mechanism to trigger detail request (e.g., `hx-get` on heatmap element/button)"
+            - "Backend view returns stock detail HTML partial"
+            - "Target element on page to display details using `hx-target` and `hx-swap`"
             - "Details update dynamically on interaction (local testing)"
           subtasks:
-            - "Add HTMX attributes to Plotly elements (might require JS interaction) or separate list"
-            - "Create a Django view to fetch and render details for one stock"
-            - "Create an HTML partial template for stock details"
+            - "Add HTMX attributes to trigger detail request (passing stock ID/ticker)"
+            - "Create a Django view to fetch and render details for one stock into an HTML partial template"
+            - "Create the HTML partial template for stock details"
             - "Add URL route for the detail view"
             - "Add target div in the main template"
-            - "Configure HTMX attributes (e.g., hx-get, hx-target, hx-swap)"
+            - "Configure `hx-target` and `hx-swap` attributes"
 
     - id: "P2_DEPLOY_PREP"
       name: "Deployment Preparation"

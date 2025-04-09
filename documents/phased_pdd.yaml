@@ -7,29 +7,31 @@ phased_development:
     duration: "Month 1"
     tech_stack:
       backend: "Django 4.2 + PostgreSQL (Local)"
-      frontend: "HTMX + Vanilla JS + Tailwind CSS + Plotly.js (SVG)"
+      frontend: "HTMX + Alpine.js (minimal) + Tailwind CSS + Plotly.js (init via JS)"
       hosting: "Local Development Environment"
-      api_framework: "Django REST Framework (basic)"
+      api_framework: "Django (views render HTML partials), DRF (optional, for specific data endpoints)"
     features:
       - "Project structure setup (Django, Apps, Templates, Static)"
       - "Local development environment setup (Python venv, local PostgreSQL/SQLite)"
       - "Basic Django models for stock/index data (Migrations)"
       - "Initial YFinance data fetching script (manual trigger, local storage/DB)"
       - "Basic heatmap template structure (Tailwind CSS setup)"
-      - "Simple Plotly.js visualization rendering (Nifty 500 initial view)"
-      - "Basic DRF endpoint to serve initial heatmap data from local DB"
+      - "Django view renders template with embedded Plotly chart JSON configuration"
+      - "Alpine.js/minimal JS initializes Plotly chart using server-provided config"
+      - "Basic Django views render initial heatmap page and necessary HTML partials"
       - "Local static file serving setup"
-      - "HTMX integration for basic page structure"
+      - "HTMX attributes added to templates for core structure and loading"
     architecture:
       design_principles:
         - "Build core functionality locally first"
         - "Leverage HTMX for server-rendered partials"
+        - "Use Alpine.js for minimal client-side enhancements"
       implementation:
-        backend: "Django settings (base/dev), Core app, Local DB config (dj-database-url)"
-        frontend: "Base template, Tailwind config, HTMX includes, Basic Plotly integration"
-        data_flow: "Manual YFinance script -> ORM (Local DB) -> DRF -> HTMX Request -> Plotly"
+        backend: "Django settings (base/dev), Core app, Local DB config (dj-database-url), Views render HTML partials"
+        frontend: "Base template with HTMX/AlpineJS includes, Tailwind config, Plotly initialized via JS from server config"
+        data_flow: "Manual YFinance script -> ORM (Local DB) -> Django View (renders partial w/ Plotly JSON) -> HTMX Response -> Alpine/JS initializes Plotly"
       hosting_cost: "$0 (Local)"
-    testing_strategy: "Pytest for backend models, services, basic DRF endpoints (local DB)"
+    testing_strategy: "Pytest for backend models, services, views (check context/HTML structure)"
     security: "Standard Django development security (SECRET_KEY management)"
 
   phase_2:
@@ -42,8 +44,8 @@ phased_development:
     features:
       - "Local Celery setup for scheduled daily YFinance data updates"
       - "Calculation & storage of essential metrics (e.g., volatility, momentum) using Pandas (local DB)"
-      - "HTMX-powered filters implementation (e.g., switch between Nifty 500 / Sector indices - local testing)"
-      - "HTMX updates for displaying selected stock details/metrics (local testing)"
+      - "HTMX-powered filters triggering server requests that return updated HTML partials (local testing)"
+      - "HTMX updates for displaying selected stock details via server-rendered partials (local testing)"
       - "Basic error handling and logging for local data pipeline"
       - "Prepare production settings (prod.py)"
       - "**End of Phase:** Setup DigitalOcean resources (App Platform, Managed DB, Spaces)"
@@ -55,11 +57,11 @@ phased_development:
         - "Complete core features locally before deploying"
         - "Ensure smooth transition from local to cloud hosting"
       implementation:
-        backend: "Local Celery tasks, Pandas integration, Refined DRF endpoints. Add prod settings. DO deployment config."
-        frontend: "Refine HTMX triggers/targets locally. Ensure static files are ready for CDN."
+        backend: "Local Celery tasks, Pandas integration, Django views for partials. Add prod settings. DO deployment config."
+        frontend: "Refine HTMX triggers/targets/swaps locally. Ensure static files are ready for CDN."
         caching: "Django DB Cache (local testing)"
       hosting_cost: "Starts at ~$32/mo towards end of phase (DO App Platform Basic + Managed PG + Spaces)"
-    testing_strategy: "Pytest for Celery tasks, services, DRF endpoints (local). Add basic deployment verification checks."
+    testing_strategy: "Pytest for Celery tasks, services, views (local). Add basic deployment verification checks."
     security: "Prepare production secrets management. HTTPS handled by DO App Platform post-deployment."
 
   phase_3:
@@ -79,10 +81,10 @@ phased_development:
         - "Progressive enhancement for PWA"
       implementation:
         backend: "Database optimizations (e.g., materialized views if needed, on DO DB)"
-        frontend: "Workbox integration, HTMX history support, Refined Plotly charts (deployed assets)"
+        frontend: "Workbox integration, HTMX history support (`hx-push-url`), Refined Plotly charts via server config"
         caching: "Configure Django DB Cache or Managed Redis on DO"
       hosting_cost: "~$32-$47/mo (depending on Redis usage)"
-    testing_strategy: "Add Cypress component tests for HTMX interactions on deployed staging/dev environment"
+    testing_strategy: "Add Cypress component tests for HTMX/Alpine interactions on deployed staging/dev environment"
     security: "Review PWA security considerations (cache management)"
 
   phase_4:
